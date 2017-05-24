@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/home_menu_label" />
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/favorite_menu_label" />
+        <item
+            android:id="@+id/nav_Estate"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/realestate_menu_label" />
+        <item
+            android:id="@+id/nav_Renovations"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/renovations_menu_label" />
+        <item
+            android:id="@+id/nav_All"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/legalservices_menu_label" />
+
+    </group>
+
+
+</menu>
