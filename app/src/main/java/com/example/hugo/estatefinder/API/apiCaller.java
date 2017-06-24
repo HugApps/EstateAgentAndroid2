@@ -56,7 +56,7 @@ public class  apiCaller  {
     }
 
 
-    public JSONObject makePostRequest (String api_call , JSONObject params , final Apicallback callback) {
+    public void makePostRequest (String api_call , JSONObject params , final Apicallback callback) {
 
         String requestURL = baseUrl+api_call;
 
@@ -71,12 +71,10 @@ public class  apiCaller  {
             public void onErrorResponse(VolleyError error) {
                 String message = "{message: 'Login Failed'}";
                 try {
+                   // System.out.println(error.networkResponse.data.toString());
                     JSONObject errorJSON = new JSONObject(message);
-                    responseData = new JSONObject("{message: Login failed}");
-                    callback.getApiError(responseData);
+                    callback.getApiError(errorJSON);
                 } catch ( JSONException je) {
-                    System.out.println("error, invalid json");
-
                     je.printStackTrace();
                 }
             }
@@ -84,8 +82,31 @@ public class  apiCaller  {
 
         );
         getRequestQueue().add(request);
+    }
 
-        return responseData !=null ? responseData : null;
+    public void makeGetRequest (String api_call, JSONObject params , final Apicallback callback) {
+        String url = baseUrl + api_call;
+        JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url,params,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.getApiResult(response);
+            }
+          },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String message = "{message: 'error, something went wrong'}";
+                try {
+                    // System.out.println(error.networkResponse.data.toString());
+                    JSONObject errorJSON = new JSONObject(message);
+                    callback.getApiError(errorJSON);
+                } catch ( JSONException je) {
+                    je.printStackTrace();
+                }
+            }
+        }
+
+        );
+        getRequestQueue().add(getRequest);
     }
 
 

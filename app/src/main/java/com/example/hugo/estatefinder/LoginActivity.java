@@ -64,12 +64,13 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         String loginJson = "{email:" + emailField.getText()+", password:" + passwordField.getText() +"}";
                         JSONObject params = new JSONObject(loginJson);
-                        JSONObject response = LoginApI.makePostRequest("Users/Login", params, new Apicallback() {
+                       LoginApI.makePostRequest("Users/Login", params, new Apicallback() {
                             @Override
                             public JSONObject getApiResult(JSONObject response) {
                                 System.out.println(response);
                                 try {
-                                     currentUser = new User(response.getString("email"),response.getString("password"));
+                                     JSONObject newUser = response.getJSONObject("User");
+                                     currentUser = new User(newUser.getString("email"),newUser.getString("password"));
                                      proccedToMain();
                                     }catch (JSONException je) {
                                        je.printStackTrace();

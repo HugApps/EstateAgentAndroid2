@@ -1,5 +1,6 @@
 package com.example.hugo.estatefinder;
 
+import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,18 +15,29 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.example.hugo.estatefinder.API.Apicallback;
+import com.example.hugo.estatefinder.API.apiCaller;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 // This is the general fragment that displays the fields related to a menu category
 public class ServicesFragment extends Fragment {
 
     TabLayout tabs ;
-    MainMenu.currentFrags selectedFrag;
     String type ;
     ViewPager tabpager;
     FragmentPager pager;
+    private apiCaller apiCaller;
     public ServicesFragment() {
         // Required empty public constructor
     }
@@ -38,10 +50,10 @@ public class ServicesFragment extends Fragment {
      * @return A new instance of fragment dataFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ServicesFragment newInstance(MainMenu.currentFrags type) {
+    public static ServicesFragment newInstance(String tag) {
 
         ServicesFragment fragment = new ServicesFragment();
-        fragment.selectedFrag = type;
+        fragment.type=tag;
         Bundle args = new Bundle();
         return fragment;
     }
@@ -59,11 +71,11 @@ public class ServicesFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_services,container, false);
         tabs = (TabLayout)v.findViewById(R.id.tablayout);
         tabpager = (ViewPager)v.findViewById(R.id.view_pager);
-        FragmentManager fragMan = getChildFragmentManager();
-        this.pager = new FragmentPager(fragMan,this.selectedFrag,this.populateTabHeadings(this.selectedFrag));
 
-        tabpager.setAdapter(pager);
-        tabs.setupWithViewPager(tabpager);
+
+        // fetch child categories from this category type
+        this.fetchCategories(this.type);
+
 
 
         return v;
@@ -81,29 +93,43 @@ public class ServicesFragment extends Fragment {
         return true;
 
     }
-    private ArrayList<categories> populateTabHeadings (MainMenu.currentFrags s) {
-        // Take
-        // s in the flag that determine which services tabhost to render
+    private void setUpPager (FragmentPager pager ) {
+        this.tabpager.setAdapter(pager);
+        this.tabs.setupWithViewPager(tabpager);
+    }
 
-        switch (s) {
-            case ESTATE:
-                 categories[] estateTitles = {new categories("All", categories.cats.ALL),
-                                              new categories("Buy/Rent", categories.cats.BUY),
-                                              new categories("Sell",categories.cats.SELL)};
-                 return new ArrayList<categories>(Arrays.asList(estateTitles));
+    private void fetchCategories  (String query) {
+        final Gson gson = new Gson();
+        final FragmentManager fragMan = getChildFragmentManager();
+        apiCaller categoryAPI =  apiCaller.getInstance(getContext());
+        categoryAPI.makeGetRequest("categories/children?name="+query, null, new Apicallback() {
+                @Override
+                public JSONObject getApiResult(JSONObject response) {
 
-            case RENOVATION:
-                categories[] renoTitles =  {new categories("All", categories.cats.ALL),
-                                              new categories("Repairs", categories.cats.REPAIRS),
-                                             new categories("Improvements",categories.cats.IMPROVEMENTS),
-                                            new categories("HandyMan", categories.cats.HANDYMAN),
-                                            new categories("Landscaping", categories.cats.LANDSCAPE)};
-                return new ArrayList<categories>(Arrays.asList(renoTitles));
+                    try {
+                       String jsonString = response.get("data").toString();
 
+                       System.out.println(response);
+                       Categories[] catFromServer = gson.fromJson(jsonString,Categories[].class);
+                       List<Categories> catsToDisplay = Arrays.asList(catFromServer);
+                        pager = new FragmentPager(fragMan,catsToDisplay);
+                        setUpPager(pager);
 
+                    } catch (JsonSyntaxException jxe) {
+                        jxe.printStackTrace();
+                    } catch (JSONException je){
+                        je.printStackTrace();
+                    }
 
-        }
-        return null;
+                    return null;
+                }
+
+                @Override
+                public String getApiError(JSONObject response) {
+                    System.out.println(response);
+                    return null;
+                }
+            });
 
     }
 

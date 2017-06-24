@@ -13,7 +13,17 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.hugo.estatefinder.API.Apicallback;
+import com.example.hugo.estatefinder.API.Services;
+import com.example.hugo.estatefinder.API.apiCaller;
+import com.google.gson.JsonSyntaxException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -28,33 +38,31 @@ public class DataListFragment extends Fragment {
    ArrayList<String> servicesList;
    TextView backtoSubCategoryButton;
    TextView dialogButton;
-    private String currentCategory;
+    private Services[] services;
 
     public DataListFragment() {
         // Required empty public constructor
     }
     // TODO: Rename and change types and number of parameters
-    public static DataListFragment newInstance(String cattype) {
+    public static DataListFragment newInstance(Services[] services) {
 
         DataListFragment fragment = new DataListFragment();
-        fragment.currentCategory = cattype;
+        fragment.services = services;
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.servicesList = new ArrayList<String>();
-        servicesList.add("test service");
-        servicesList.add("another services");
-        servicesList.add("thats all for now");
-        servicesList.add("a");
-        servicesList.add("bob");
 
 
+        // get Services from server
+        if(this.services !=null && this.services.length>0 ) {
+            //convert array to arrayList
+            this.servicesList= new ArrayList(Arrays.asList(this.services));
+        }
 
     }
-
 
 
     @Override
@@ -63,13 +71,14 @@ public class DataListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_data_list,container,false);
         this.tablayout = (ListView) v.findViewById(R.id.servicedatalist);
-        tablayout.setAdapter(new DataListAdapter(getContext(),R.layout.fragment_services_data_row,servicesList));
+
+        tablayout.setAdapter(new DataListAdapter(getContext(),R.layout.fragment_services_data_row,this.servicesList));
 
         this.backtoSubCategoryButton = (TextView)v.findViewById(R.id.backtosubs);
         this.dialogButton = (TextView) v.findViewById(R.id.filtersort);
         this.dialogButton.setClickable(true);
         this.backtoSubCategoryButton.setClickable(true);
-        if(this.currentCategory.equals("BROWSE") || this.currentCategory.equals("Favorite") ) {
+        /*if(this.currentCategory.equals("BROWSE") || this.currentCategory.equals("Favorite") ) {
 
             this.backtoSubCategoryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,7 +95,7 @@ public class DataListFragment extends Fragment {
             });
 
 
-        }
+        } */
 
         return v;
     }

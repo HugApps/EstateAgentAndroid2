@@ -96,27 +96,27 @@ public class MainMenu extends AppCompatActivity
                  break;
              case ESTATE:
                  System.out.println("Going to estate page");
-                 ft.replace(this.currentFrame.getId(),ServicesFragment.newInstance(currentFrags.valueOf(tag)),tag);
+                 ft.replace(this.currentFrame.getId(),ServicesFragment.newInstance("Real Estate"),tag);
                  ft.addToBackStack(tag);
                  ft.commit();
                  break;
              case RENOVATION:
                  System.out.println("Going to Renovation page");
-                 ft.replace(this.currentFrame.getId(),ServicesFragment.newInstance(currentFrags.valueOf(tag)),tag);
+                 ft.replace(this.currentFrame.getId(),ServicesFragment.newInstance("Renovations"),tag);
                  ft.addToBackStack(tag);
                  ft.commit();
                  break;
              case FAVS:
-                 System.out.println("Going to Favoritse page");
+                 /*System.out.println("Going to Favoritse page");
                  ft.replace(this.currentFrame.getId(), DataListFragment.newInstance("Favorite"));
                  ft.addToBackStack(tag);
-                 ft.commit();
+                 ft.commit();*/
                  break;
              case BROWSE:
-                 System.out.println("Going to Browse ALl page");
+                /* System.out.println("Going to Browse ALl page");
                  ft.replace(this.currentFrame.getId(),DataListFragment.newInstance("BROWSE"));
                  ft.addToBackStack(tag);
-                 ft.commit();
+                 ft.commit();*/
                  break;
 
 

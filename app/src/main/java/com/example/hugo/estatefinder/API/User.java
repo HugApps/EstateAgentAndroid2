@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Hugo on 2017-04-03.
  */
 // Represntation of user signing on
-public  class User {
+public class User {
 
     String email;
     ArrayList<Services> favoriteList;

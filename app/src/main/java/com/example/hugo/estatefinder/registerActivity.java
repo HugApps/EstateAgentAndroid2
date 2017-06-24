@@ -87,7 +87,7 @@ public class registerActivity extends AppCompatActivity {
                         @Override
                         public String getApiError(JSONObject response) {
                             System.out.println(response);
-
+                            showDialog("Registration failed","Login Failed, Incorrect password or username");
                             return null;
                         }
                     });

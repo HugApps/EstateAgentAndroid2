@@ -8,19 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hugo on 2017-02-19.
  */
 
 public class FragmentPager extends FragmentStatePagerAdapter {
-    MainMenu.currentFrags selectedFrag;
-    ArrayList<categories> tabHeadings = new ArrayList<categories> ();
+    List<Categories> tabHeadings ;
     int index = 0 ;
-    public FragmentPager(FragmentManager fm,MainMenu.currentFrags type , ArrayList<categories> categories) {
+
+    public FragmentPager(FragmentManager fm, List<Categories> categories) {
         super(fm);
-        this.selectedFrag=type;
+
         tabHeadings =categories;
+        System.out.println(tabHeadings);
     }
 
     @Override
@@ -83,7 +85,10 @@ public class FragmentPager extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         String title;
+        System.out.println(this.tabHeadings.get(position).name);
+        System.out.println(this.tabHeadings.get(position)._id);
+        System.out.println(this.tabHeadings.get(position).parent);
 
-        return this.tabHeadings.get(position).label;
+        return this.tabHeadings.get(position).name;
     }
 }
