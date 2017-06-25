@@ -16,23 +16,25 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.hugo.estatefinder.API.Services;
+
 import java.util.ArrayList;
 
 /**
  * Created by Hugo on 2017-03-05.
  */
 
-public class DataListAdapter extends ArrayAdapter<String> {
+public class DataListAdapter extends ArrayAdapter<Services> {
 
 
     TextView serviceTitle;
     Button detailsButton;
     Button contactButton;
     RatingBar avgRatingBar;
-    ArrayList<String> companyNames;
+    ArrayList<Services> companyNames;
     RelativeLayout frame;
     Context application;
-    public DataListAdapter (Context context, int resource , ArrayList<String> data){
+    public DataListAdapter (Context context, int resource , ArrayList<Services> data){
         super(context,resource,data);
         this.companyNames = data;
         this.application = context;
@@ -43,12 +45,11 @@ public class DataListAdapter extends ArrayAdapter<String> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_services_data_row, parent, false);
         }
-
+        final Services currentService = companyNames.get(position);
         this.frame = (RelativeLayout)convertView.findViewById(R.id.detailframe) ;
         this.serviceTitle = (TextView) convertView.findViewById(R.id.servicesTitle);
 
-        serviceTitle.setText(companyNames.get(position));
-
+        serviceTitle.setText(currentService.name);
         this.detailsButton = (Button) convertView.findViewById(R.id.detailsButton);
         // set onClickListner to start a new fragment with the service detail
         this.detailsButton.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +57,7 @@ public class DataListAdapter extends ArrayAdapter<String> {
             public void onClick(View view) {
 
                 FragmentTransaction ft = ((FragmentActivity)application).getSupportFragmentManager().beginTransaction();
-                Fragment detailFragment = new serviceDetailFragment();
+                Fragment detailFragment = serviceDetailFragment.newInstance(currentService);
                 ft.replace(R.id.current_fragment,detailFragment,"tset");
                 ft.addToBackStack("tset");
                 ft.commit();
@@ -65,7 +66,8 @@ public class DataListAdapter extends ArrayAdapter<String> {
 
         this.contactButton = (Button) convertView.findViewById(R.id.contactButton);
         this.avgRatingBar = (RatingBar)convertView.findViewById(R.id.avgRating);
-        this.avgRatingBar.setRating(3);
+        this.avgRatingBar.setRating(Integer.parseInt(currentService.avgRating));
+        this.avgRatingBar.setIsIndicator(true);
 
         return convertView;
     }

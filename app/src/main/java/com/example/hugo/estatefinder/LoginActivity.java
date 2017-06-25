@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showDialog(String message, String title) {
-         WarningDialog loginWarning = WarningDialog.newInstance(message,title,getApplicationContext());
+          WarningDialog loginWarning = WarningDialog.newInstance(message,title,getApplicationContext());
           FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
           Fragment prev = getSupportFragmentManager().findFragmentByTag("login_dialog");
 

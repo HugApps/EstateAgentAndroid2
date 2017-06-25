@@ -117,6 +117,7 @@ public class ServicesListFragment extends Fragment {
 
                 try {
                     String jsonString = response.get("data").toString();
+                    System.out.println(jsonString);
                     Services[] servicesFromCat = gson.fromJson(jsonString,Services[].class);
                     LoadInfoPane(servicesFromCat);
 
@@ -132,6 +133,17 @@ public class ServicesListFragment extends Fragment {
             @Override
             public String getApiError(JSONObject response) {
                 System.out.println(response);
+                WarningDialog loginWarning = WarningDialog.newInstance("No services found","serverError",getContext());
+                FragmentTransaction ft =fragMan.beginTransaction();
+                Fragment prev =fragMan.findFragmentByTag("service_dialog");
+
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+
+                // Create and show the dialog.
+                loginWarning.show(ft,"service_dialog");
                 return null;
             }
         });
@@ -174,8 +186,9 @@ public class ServicesListFragment extends Fragment {
         FragmentManager fm = getChildFragmentManager();
         DataListFragment datafrag = new DataListFragment().newInstance(services);
         FragmentTransaction ft = fm.beginTransaction();
-       // ft.add(datafrag,subcategory);
-        ft.replace(this.infoPane.getId(),datafrag);
+        //ft.add(datafrag,"subcategory");
+        ft.replace(R.id.infopane,datafrag);
+
         ft.addToBackStack("subcategory");
         ft.commit();
     }

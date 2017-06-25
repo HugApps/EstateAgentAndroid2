@@ -5,13 +5,14 @@ package com.example.hugo.estatefinder.API;
  */
 // represents object of a buisness
 public class Services {
-     String buisnessName;
-    String BuisnessOwner;
-    String description,address,email,phoneNum;
-    String hours;
-    String pricePerHour;
-    String price;
-    String rating;
+    public String name;
+    public String owner;
+    public String description,address,email,phone;
+    public String hours;
+    public String pricePerHour;
+    public String price;
+    public String avgRating;
+    public String _id;
 
 
 }
