@@ -66,7 +66,7 @@ public class DataListAdapter extends ArrayAdapter<Services> {
 
         this.contactButton = (Button) convertView.findViewById(R.id.contactButton);
         this.avgRatingBar = (RatingBar)convertView.findViewById(R.id.avgRating);
-        this.avgRatingBar.setRating(Integer.parseInt(currentService.avgRating));
+        this.avgRatingBar.setRating(Float.parseFloat(currentService.avgRating));
         this.avgRatingBar.setIsIndicator(true);
 
         return convertView;

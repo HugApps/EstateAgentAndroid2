@@ -13,7 +13,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.hugo.estatefinder.API.Apicallback;
 import com.example.hugo.estatefinder.API.Services;
+import com.example.hugo.estatefinder.API.apiCaller;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 // displays buisness details a
 public class serviceDetailFragment extends Fragment {
@@ -23,6 +28,7 @@ public class serviceDetailFragment extends Fragment {
     RatingBar avgRating;
     Button commentButton,saveFavButton,contactButton,rateButton;
     Services currentService;
+    apiCaller detailAPI = apiCaller.getInstance(getContext());
 
 
     public serviceDetailFragment() {
@@ -78,12 +84,29 @@ public class serviceDetailFragment extends Fragment {
     private void bindActions (){
 
 
-        this.avgRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        this.rateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-
+            public void onClick(View view) {
+                String rateData = "{id:"+currentService._id+",rate:" +String.valueOf(avgRating.getRating()) +"}";
+                try {
+                    detailAPI.makePostRequest("services/rate", new JSONObject(rateData), new Apicallback() {
+                        @Override
+                        public JSONObject getApiResult(JSONObject response) {
+                            System.out.println(response);
+                            return null;
+                        }
+                        @Override
+                        public String getApiError(JSONObject response) {
+                            System.out.println(response);
+                            return null;
+                        }
+                    });
+                } catch (JSONException je) {
+                    je.printStackTrace();
+                }
             }
         });
+
         this.email.setClickable(true);
         this.email.setOnClickListener(new View.OnClickListener() {
             @Override
